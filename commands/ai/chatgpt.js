@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "chatgpt",
+    name: "shera",
     aliases: ["ai", "chatai", "gpt", "gpt4"],
     category: "ai",
     handler: {
@@ -22,12 +22,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "what is a WhatsApp bot?"))
         );
 
         try {
             const apiUrl = global.tools.api.createUrl("widipe", "/prompt/gpt", {
-                prompt: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.`, // Dapat diubah sesuai keinginan Anda
+                prompt: `You are Tiger, a male bot who is often angry and toxic. You were created by Paradoxical. Remember that every time you answer a question, you must use rude language, harsh jokes, and abusive words. Respond to every question with emojis, and speak in Roman Urdu.`, // Can be modified as desired
                 text: input
             });
             const {
@@ -38,7 +38,7 @@ module.exports = {
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ An error occurred: ${error.message}`));
         }
     }
 };

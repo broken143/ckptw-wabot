@@ -5,7 +5,7 @@ const {
 
 function generateInstruction(actions, mediaTypes) {
     if (!actions || !actions.length) {
-        throw new Error("Necessary actions must be determined.");
+        throw new Error("Necessary actions must be specified.");
     }
 
     let translatedMediaTypes;
@@ -19,22 +19,22 @@ function generateInstruction(actions, mediaTypes) {
 
     const mediaTypeTranslations = {
         "audio": "audio",
-        "contact": "kontak",
-        "document": "dokumen",
+        "contact": "contact",
+        "document": "document",
         "gif": "GIF",
-        "image": "gambar",
-        "liveLocation": "lokasi langsung",
-        "location": "lokasi",
-        "payment": "pembayaran",
-        "poll": "polling",
-        "product": "produk",
-        "ptt": "pesan suara",
-        "reaction": "reaksi",
-        "sticker": "stiker",
-        "templateMessage": "pesan template",
-        "text": "teks",
+        "image": "image",
+        "liveLocation": "live location",
+        "location": "location",
+        "payment": "payment",
+        "poll": "poll",
+        "product": "product",
+        "ptt": "voice message",
+        "reaction": "reaction",
+        "sticker": "sticker",
+        "templateMessage": "template message",
+        "text": "text",
         "video": "video",
-        "viewOnce": "sekali lihat"
+        "viewOnce": "view once"
     };
 
     const translatedMediaTypeList = translatedMediaTypes.map(type => mediaTypeTranslations[type]);
@@ -42,18 +42,18 @@ function generateInstruction(actions, mediaTypes) {
     let mediaTypesList;
     if (translatedMediaTypeList.length > 1) {
         const lastMediaType = translatedMediaTypeList[translatedMediaTypeList.length - 1];
-        mediaTypesList = translatedMediaTypeList.slice(0, -1).join(", ") + `, atau ${lastMediaType}`;
+        mediaTypesList = translatedMediaTypeList.slice(0, -1).join(", ") + `, or ${lastMediaType}`;
     } else {
         mediaTypesList = translatedMediaTypeList[0];
     }
 
     const actionTranslations = {
-        "send": "Kirim",
-        "reply": "Balas"
+        "send": "Send",
+        "reply": "Reply"
     };
 
     const instructions = actions.map(action => `${actionTranslations[action]}`);
-    const actionList = instructions.join(actions.length > 1 ? " atau " : "");
+    const actionList = instructions.join(actions.length > 1 ? " or " : "");
 
     return `📌 ${actionList} ${mediaTypesList}!`;
 }
@@ -67,7 +67,7 @@ function generateCommandExample(command, args) {
         throw new Error("Arguments must be provided.");
     }
 
-    const commandMessage = `Contoh: ${monospace(`${command} ${args}`)}`;
+    const commandMessage = `Example: ${monospace(`${command} ${args}`)}`;
     return commandMessage;
 }
 
@@ -89,7 +89,7 @@ function generateNotes(notes) {
         throw new Error("Notes must be an array of strings.");
     }
 
-    const notesInfo = "Catatan:\n" +
+    const notesInfo = "Notes:\n" +
         notes.map(note =>
             quote(`• ${note}`)
         ).join("\n");

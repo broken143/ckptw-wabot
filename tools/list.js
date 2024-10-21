@@ -15,15 +15,15 @@ async function get(type, ctx) {
 
     const generateMenuText = (cmd, tag) => {
         let menuText =
-            `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
+            `Hi ${ctx.sender.pushName || "Friend"}, here is the list of available commands!\n` +
             "\n" +
-            `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt)}`)}\n` +
-            `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
-            `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
-            `${quote(`Versi: ${pkg.version}`)}\n` +
+            `${quote(`Uptime: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt)}`)}\n` +
+            `${quote(`Date: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
+            `${quote(`Time: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(`Version: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
-            `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
+            `${italic("Don’t forget to donate to keep the bot online!")}\n` +
             `${global.config.msg.readmore}\n`;
 
         for (const category of Object.keys(tag)) {
@@ -58,7 +58,6 @@ async function get(type, ctx) {
             }
         }
 
-
         menuText += global.config.msg.footer;
         return menuText;
     };
@@ -68,8 +67,8 @@ async function get(type, ctx) {
             case "alkitab": {
                 const data = (await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}))).data.data;
                 text = data.map(d =>
-                        `Buku: ${d.name} (${d.abbr})\n` +
-                        `Jumlah Bab: ${d.chapter}\n`
+                        `Book: ${d.name} (${d.abbr})\n` +
+                        `Number of Chapters: ${d.chapter}\n`
                     ).join(`${quote("─────")}\n`) +
                     global.config.msg.footer;
                 break;
@@ -78,7 +77,7 @@ async function get(type, ctx) {
                 const data = (await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}))).data.data;
                 text = data.map(d =>
                         `${quote(`Surah: ${d.namaLatin} (${d.nomor})`)}\n` +
-                        `${quote(`Jumlah Ayat: ${d.jumlahAyat}`)}\n`
+                        `${quote(`Number of Verses: ${d.jumlahAyat}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -106,7 +105,7 @@ async function get(type, ctx) {
                 break;
             }
             case "jadwaltv": {
-                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
+                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Here is the list of available TV channels: ")[1].split(", ");
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
@@ -115,8 +114,8 @@ async function get(type, ctx) {
             case "translate": {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
                 text = data.map(d =>
-                        `${quote(`Kode: ${d.code}`)}\n` +
-                        `${quote(`Bahasa: ${d.bahasa}`)}\n`
+                        `${quote(`Code: ${d.code}`)}\n` +
+                        `${quote(`Language: ${d.bahasa}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -125,8 +124,8 @@ async function get(type, ctx) {
             case "tts": {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
                 text = data.map(d =>
-                        `${quote(`Kode: ${d.code}`)}\n` +
-                        `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
+                        `${quote(`Code: ${d.code}`)}\n` +
+                        `${quote(`Language: ${d["bahasa negara"]}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -160,7 +159,7 @@ async function get(type, ctx) {
                 };
 
                 if (!cmd || cmd.size === 0) {
-                    text = quote("❎ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
+                    text = quote("❎ Error: No commands found.");
                 } else {
                     text = generateMenuText(cmd, tag);
                 }
@@ -168,13 +167,13 @@ async function get(type, ctx) {
             }
             default: {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                text = quote(`❎ Tidak diketahui: ${type}`);
+                text = quote(`❎ Unknown: ${type}`);
                 break;
             }
         }
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        text = quote(`❎ Terjadi kesalahan: ${error.message}`);
+        text = quote(`❎ An error occurred: ${error.message}`);
     }
 
     return text;
